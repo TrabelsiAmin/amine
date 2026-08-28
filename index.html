@@ -13,9 +13,9 @@
     --panel:#131318;
     --panel-2:#1b1c22;
     --line: rgba(242,240,232,0.10);
-    --red:#ff2440;
-    --red-dim: rgba(255,36,64,0.35);
-    --amber:#ffb020;
+    --red:#ff3a1f;
+    --red-dim: rgba(255,58,31,0.35);
+    --amber:#ff8a1e;
     --white:#f2f0e8;
     --text:#e9e7df;
     --muted:#8b8b93;
@@ -30,7 +30,11 @@
   }
   .jp{ font-family:'Zen Kaku Gothic New', sans-serif; }
   .display{ font-family:'Bebas Neue', sans-serif; letter-spacing:0.04em; }
-  .bg-video-wrap{ position:fixed; inset:0; overflow:hidden; z-index:0; }
+
+  /* ---------- shared video layer ---------- */
+  .bg-video-wrap{
+    position:fixed; inset:0; overflow:hidden; z-index:0;
+  }
   .bg-video-wrap video{
     position:absolute; top:50%; left:50%; min-width:100%; min-height:100%;
     width:auto; height:auto; transform:translate(-50%,-50%);
@@ -38,77 +42,211 @@
   }
   .bg-scrim{
     position:absolute; inset:0;
-    background: linear-gradient(180deg, rgba(8,8,11,0.55) 0%, rgba(8,8,11,0.35) 35%, rgba(8,8,11,0.75) 78%, rgba(8,8,11,0.96) 100%);
+    background:
+      linear-gradient(180deg, rgba(8,8,11,0.55) 0%, rgba(8,8,11,0.35) 35%, rgba(8,8,11,0.75) 78%, rgba(8,8,11,0.96) 100%);
   }
   .grain{
     position:fixed; inset:0; z-index:5; pointer-events:none; opacity:0.05; mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  #splash{ position:fixed; inset:0; z-index:20; display:flex; align-items:center; justify-content:center; background:var(--bg); transition:opacity 0.9s ease, visibility 0.9s ease; }
+
+  /* ================= SPLASH ================= */
+  #splash{
+    position:fixed; inset:0; z-index:20;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bg);
+    transition:opacity 0.9s ease, visibility 0.9s ease;
+  }
   #splash .bg-video-wrap{ filter:blur(6px) brightness(0.5); }
   #splash.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
-  .ignition{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:22px; }
-  .ignition-ring{
-    position:relative; width:132px; height:132px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    border:1px solid var(--line); background: radial-gradient(circle at 35% 30%, #1c1c22, #0c0c0f 70%);
-    cursor:pointer; box-shadow: 0 0 0 0 var(--red-dim); animation: idlePulse 2.6s ease-in-out infinite;
+
+  .ignition{
+    position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:22px;
   }
-  @keyframes idlePulse{ 0%,100%{ box-shadow: 0 0 0 0 rgba(255,36,64,0.25); } 50%{ box-shadow: 0 0 26px 6px rgba(255,36,64,0.18); } }
-  .ignition-btn{ width:92px; height:92px; border-radius:50%; background:linear-gradient(160deg,#2a1014,#160709); border:1px solid rgba(255,36,64,0.5); display:flex; align-items:center; justify-content:center; transition:transform 0.15s ease, background 0.3s ease; }
+  .ignition-ring{
+    position:relative; width:132px; height:132px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+    background: radial-gradient(circle at 35% 30%, #1c1c22, #0c0c0f 70%);
+    cursor:pointer;
+    box-shadow: 0 0 0 0 var(--red-dim);
+    animation: idlePulse 2.6s ease-in-out infinite;
+  }
+  @keyframes idlePulse{
+    0%,100%{ box-shadow: 0 0 0 0 rgba(255,36,64,0.25); }
+    50%{ box-shadow: 0 0 26px 6px rgba(255,36,64,0.18); }
+  }
+  .ignition-btn{
+    width:92px; height:92px; border-radius:50%;
+    background:linear-gradient(160deg,#2a1014,#160709);
+    border:1px solid rgba(255,36,64,0.5);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform 0.15s ease, background 0.3s ease;
+  }
   .ignition-ring:hover .ignition-btn{ background:linear-gradient(160deg,#3a141a,#1a080a); }
   .ignition-ring:active .ignition-btn{ transform:scale(0.94); }
   .ignition-btn svg{ width:34px; height:34px; }
   .ignition-btn path{ stroke:var(--red); }
-  .ignition-label{ font-family:'Rajdhani', sans-serif; font-weight:700; letter-spacing:0.35em; font-size:12px; color:var(--muted); text-transform:uppercase; }
+
+  .ignition-label{
+    font-family:'Rajdhani', sans-serif; font-weight:700; letter-spacing:0.35em;
+    font-size:12px; color:var(--muted); text-transform:uppercase;
+  }
   .ignition-label b{ color:var(--red); }
-  #flash{ position:fixed; inset:0; z-index:30; background:#fff; opacity:0; pointer-events:none; }
+
+  #flash{
+    position:fixed; inset:0; z-index:30; background:#fff; opacity:0; pointer-events:none;
+  }
   #flash.fire{ animation: strobe 0.5s ease-out forwards; }
-  @keyframes strobe{ 0%{opacity:0;} 12%{opacity:1;} 24%{opacity:0;} 34%{opacity:0.7;} 50%{opacity:0;} 100%{opacity:0;} }
-  #main{ position:fixed; inset:0; z-index:10; opacity:0; visibility:hidden; transition:opacity 1s ease 0.3s, visibility 1s ease 0.3s; }
+  @keyframes strobe{
+    0%{opacity:0;} 12%{opacity:1;} 24%{opacity:0;} 34%{opacity:0.7;} 50%{opacity:0;} 100%{opacity:0;}
+  }
+
+  /* ================= MAIN ================= */
+  #main{
+    position:fixed; inset:0; z-index:10; opacity:0; visibility:hidden;
+    transition:opacity 1s ease 0.3s, visibility 1s ease 0.3s;
+  }
   #main.show{ opacity:1; visibility:visible; }
-  .content{ position:relative; z-index:2; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; }
+
+  .content{
+    position:relative; z-index:2; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:24px;
+  }
+
   .eyebrow-jp{ font-size:15px; letter-spacing:0.3em; color:var(--muted); margin-bottom:6px; }
   .eyebrow-jp b{ color:var(--white); font-weight:700; }
-  .plate{ margin:10px 0 22px 0; background: var(--white); color:#0c0c0f; border-radius:6px; padding:14px 30px 10px 30px; border:2px solid #0c0c0f; box-shadow: 0 0 0 3px rgba(242,240,232,0.15), 0 18px 40px -12px rgba(0,0,0,0.7); display:inline-flex; flex-direction:column; align-items:center; position:relative; }
-  .plate::before{ content:""; position:absolute; left:8px; right:8px; top:6px; bottom:6px; border:1px solid rgba(12,12,15,0.15); border-radius:2px; pointer-events:none; }
-  .plate .name{ font-family:'Bebas Neue', sans-serif; font-size:clamp(46px, 11vw, 92px); line-height:0.95; letter-spacing:0.06em; }
-  .plate .region{ font-family:'Rajdhani', sans-serif; font-weight:700; font-size:11px; letter-spacing:0.3em; color:#5a5a5a; border-top:1px solid rgba(12,12,15,0.2); margin-top:6px; padding-top:4px; width:100%; text-align:center; }
-  .quote{ max-width:520px; font-family:'Inter', sans-serif; font-style:italic; font-size:15px; line-height:1.55; color:var(--text); opacity:0.88; position:relative; padding:0 14px; }
+
+  .plate{
+    margin:10px 0 22px 0;
+    background: var(--white);
+    color:#0c0c0f;
+    border-radius:6px;
+    padding:14px 30px 10px 30px;
+    border:2px solid #0c0c0f;
+    box-shadow: 0 0 0 3px rgba(242,240,232,0.15), 0 18px 40px -12px rgba(0,0,0,0.7);
+    display:inline-flex; flex-direction:column; align-items:center;
+    position:relative;
+  }
+  .plate::before{
+    content:""; position:absolute; left:8px; right:8px; top:6px; bottom:6px;
+    border:1px solid rgba(12,12,15,0.15); border-radius:2px; pointer-events:none;
+  }
+  .plate .name{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(46px, 11vw, 92px);
+    line-height:0.95;
+    letter-spacing:0.06em;
+  }
+  .plate .region{
+    font-family:'Rajdhani', sans-serif; font-weight:700;
+    font-size:11px; letter-spacing:0.3em; color:#5a5a5a;
+    border-top:1px solid rgba(12,12,15,0.2);
+    margin-top:6px; padding-top:4px; width:100%; text-align:center;
+  }
+
+  .quote{
+    max-width:520px; font-family:'Inter', sans-serif; font-style:italic;
+    font-size:15px; line-height:1.55; color:var(--text); opacity:0.88;
+    position:relative; padding:0 14px;
+  }
   .quote::before{ content:"“"; color:var(--red); font-family:'Inter',sans-serif; font-style:normal; margin-right:2px; }
   .quote::after{ content:"”"; color:var(--red); font-family:'Inter',sans-serif; font-style:normal; margin-left:2px; }
-  .enter-connections{ margin-top:36px; display:flex; align-items:center; gap:10px; background:transparent; border:1px solid var(--line); color:var(--text); font-family:'Rajdhani', sans-serif; font-weight:600; letter-spacing:0.25em; font-size:12px; text-transform:uppercase; padding:12px 22px; border-radius:999px; cursor:pointer; transition:border-color 0.25s ease, background 0.25s ease; }
+
+  .enter-connections{
+    margin-top:36px;
+    display:flex; align-items:center; gap:10px;
+    background:transparent; border:1px solid var(--line); color:var(--text);
+    font-family:'Rajdhani', sans-serif; font-weight:600; letter-spacing:0.25em;
+    font-size:12px; text-transform:uppercase;
+    padding:12px 22px; border-radius:999px; cursor:pointer;
+    transition:border-color 0.25s ease, background 0.25s ease;
+  }
   .enter-connections:hover{ border-color:var(--red); background:rgba(255,36,64,0.08); }
   .enter-connections svg{ width:14px; height:14px; }
   .enter-connections path{ stroke:var(--text); }
-  .stamp{ position:absolute; bottom:18px; left:0; right:0; text-align:center; font-size:10px; letter-spacing:0.3em; color:var(--muted); text-transform:uppercase; }
-  #overlay{ position:fixed; inset:0; z-index:40; background:rgba(8,8,11,0.6); opacity:0; visibility:hidden; transition:opacity 0.35s ease, visibility 0.35s ease; }
+
+  .stamp{
+    position:absolute; bottom:18px; left:0; right:0; text-align:center;
+    font-size:10px; letter-spacing:0.3em; color:var(--muted); text-transform:uppercase;
+  }
+
+  /* ================= CONNECTIONS SHEET ================= */
+  #overlay{
+    position:fixed; inset:0; z-index:40; background:rgba(8,8,11,0.6);
+    opacity:0; visibility:hidden; transition:opacity 0.35s ease, visibility 0.35s ease;
+  }
   #overlay.show{ opacity:1; visibility:visible; }
-  #sheet{ position:fixed; left:0; right:0; bottom:0; z-index:41; background:var(--panel); border-top:1px solid var(--line); border-radius:18px 18px 0 0; padding:22px 20px 26px 20px; max-height:78vh; overflow-y:auto; transform:translateY(100%); transition:transform 0.4s cubic-bezier(.2,.9,.25,1); }
+
+  #sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:41;
+    background:var(--panel);
+    border-top:1px solid var(--line);
+    border-radius:18px 18px 0 0;
+    padding:22px 20px 26px 20px;
+    max-height:78vh; overflow-y:auto;
+    transform:translateY(100%);
+    transition:transform 0.4s cubic-bezier(.2,.9,.25,1);
+  }
   #sheet.show{ transform:translateY(0); }
-  .sheet-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .sheet-head{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;
+  }
   .sheet-title{ font-family:'Bebas Neue', sans-serif; letter-spacing:0.1em; font-size:20px; color:var(--white); }
-  .sheet-close{ width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:transparent; color:var(--muted); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .sheet-close{
+    width:30px; height:30px; border-radius:50%; border:1px solid var(--line); background:transparent;
+    color:var(--muted); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
   .sheet-close:hover{ border-color:var(--red); color:var(--red); }
-  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:520px; margin:0 auto; }
+
+  .grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    max-width:520px; margin:0 auto;
+  }
   @media (max-width:420px){ .grid{ grid-template-columns:1fr; } }
-  .card{ display:flex; align-items:center; gap:12px; background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; text-decoration:none; color:var(--text); cursor:pointer; position:relative; overflow:hidden; transition:border-color 0.2s ease, transform 0.15s ease; }
+
+  .card{
+    display:flex; align-items:center; gap:12px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; text-decoration:none; color:var(--text);
+    cursor:pointer; position:relative; overflow:hidden;
+    transition:border-color 0.2s ease, transform 0.15s ease;
+  }
   .card:hover{ border-color:var(--red-dim); transform:translateY(-1px); }
   .card:active{ transform:translateY(0); }
-  .card .icon{ width:34px; height:34px; flex:0 0 34px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:rgba(255,36,64,0.10); border:1px solid rgba(255,36,64,0.25); }
+  .card .icon{
+    width:34px; height:34px; flex:0 0 34px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,36,64,0.10); border:1px solid rgba(255,36,64,0.25);
+  }
   .card .icon svg{ width:17px; height:17px; }
   .card .icon path, .card .icon circle, .card .icon rect{ stroke:var(--red); }
   .card .meta{ display:flex; flex-direction:column; min-width:0; text-align:left; }
   .card .plat{ font-size:11px; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; }
   .card .handle{ font-family:'Inter',sans-serif; font-size:13.5px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .card .copy-hint{ position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:10px; letter-spacing:0.15em; color:var(--amber); opacity:0; text-transform:uppercase; transition:opacity 0.2s ease; }
+  .card .copy-hint{
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    font-size:10px; letter-spacing:0.15em; color:var(--amber); opacity:0; text-transform:uppercase;
+    transition:opacity 0.2s ease;
+  }
   .card.copied .copy-hint{ opacity:1; }
-  .music{ margin-top:16px; border-top:1px solid var(--line); padding-top:16px; max-width:520px; margin-left:auto; margin-right:auto; }
+
+  .music{
+    margin-top:16px; border-top:1px solid var(--line); padding-top:16px; max-width:520px; margin-left:auto; margin-right:auto;
+  }
   .music-label{ font-size:11px; letter-spacing:0.25em; color:var(--muted); text-transform:uppercase; margin-bottom:10px; }
   .music iframe{ width:100%; border-radius:12px; border:1px solid var(--line); }
-  @media (prefers-reduced-motion: reduce){ .ignition-ring{ animation:none; } #sheet, #main, #splash, .card{ transition:none; } }
+
+  @media (prefers-reduced-motion: reduce){
+    .ignition-ring{ animation:none; }
+    #sheet, #main, #splash, .card{ transition:none; }
+  }
 </style>
 </head>
 <body>
+
+  <!-- SPLASH / IGNITION -->
   <div id="splash">
     <div class="bg-video-wrap">
       <video autoplay muted loop playsinline poster="">
@@ -117,58 +255,119 @@
       <div class="bg-scrim"></div>
     </div>
     <div class="ignition">
-      <div class="ignition-ring" id="startBtn"><div class="ignition-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v8"></path><path d="M6.3 6.3a8 8 0 1 0 11.4 0"></path></svg></div></div>
+      <div class="ignition-ring" id="startBtn">
+        <div class="ignition-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v8"></path>
+            <path d="M6.3 6.3a8 8 0 1 0 11.4 0"></path>
+          </svg>
+        </div>
+      </div>
       <div class="ignition-label">Push to <b>Start</b></div>
     </div>
   </div>
   <div id="flash"></div>
+
+  <!-- MAIN -->
   <div id="main">
     <div class="bg-video-wrap">
-      <video autoplay muted loop playsinline id="mainVideo"><source src="https://videos.pexels.com/video-files/32120999/13694166_1920_1080_60fps.mp4" type="video/mp4"></video>
+      <video autoplay muted loop playsinline id="mainVideo">
+        <source src="https://videos.pexels.com/video-files/32120999/13694166_1920_1080_60fps.mp4" type="video/mp4">
+      </video>
       <div class="bg-scrim"></div>
     </div>
+
     <div class="content">
       <div class="eyebrow-jp jp"><b>速い</b></div>
-      <div class="plate"><div class="name">AMINE</div><div class="region">TN · JDM</div></div>
+      <div class="plate">
+        <div class="name">AMINE</div>
+        <div class="region">TN · JDM</div>
+      </div>
       <p class="quote">Wake up to reality! Nothing ever goes as planned in this accursed world.</p>
-      <button class="enter-connections" id="openSheet"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>Connections</button>
+
+      <button class="enter-connections" id="openSheet">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>
+        Connections
+      </button>
     </div>
     <div class="stamp">GTR R35 &middot; NIGHT RUN</div>
   </div>
+
+  <!-- CONNECTIONS SHEET -->
   <div id="overlay"></div>
   <div id="sheet">
-    <div class="sheet-head"><div class="sheet-title">CONNECTIONS</div><button class="sheet-close" id="closeSheet">&times;</button></div>
-    <div class="grid">
-      <a class="card" href="https://www.instagram.com/mohamed.amine_trabelsi/" target="_blank" rel="noopener"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r="0.6" fill="var(--red)"></circle></svg></div><div class="meta"><div class="plat">Instagram</div><div class="handle">mohamed.amine_trabelsi</div></div></a>
-      <a class="card" href="https://www.facebook.com/med.damino" target="_blank" rel="noopener"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H8v3h3v6h3v-6h3l1-3h-4V9c0-.3.3-.5.6-.5"></path></svg></div><div class="meta"><div class="plat">Facebook</div><div class="handle">Med Damino</div></div></a>
-      <div class="card" id="discordCard"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="7" width="16" height="11" rx="4"></rect><circle cx="9" cy="12.5" r="1.2" fill="var(--red)"></circle><circle cx="15" cy="12.5" r="1.2" fill="var(--red)"></circle><path d="M8 7l1-2h6l1 2"></path></svg></div><div class="meta"><div class="plat">Discord</div><div class="handle">amiiiine4444</div></div><div class="copy-hint">Copied</div></div>
-      <div class="card" id="riotCard"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 20L20 4M4 4l6 6M20 20l-6-6"></path></svg></div><div class="meta"><div class="plat">Valorant</div><div class="handle">amiiiine#4444</div></div><div class="copy-hint">Copied</div></div>
+    <div class="sheet-head">
+      <div class="sheet-title">CONNECTIONS</div>
+      <button class="sheet-close" id="closeSheet">&times;</button>
     </div>
-    <div class="music"><div class="music-label">On repeat</div><iframe src="https://open.spotify.com/embed/user/31ws3jae7wpjnysvl6l7iumoycmu?utm_source=generator&theme=0" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>
+
+    <div class="grid">
+      <a class="card" href="https://www.instagram.com/mohamed.amine_trabelsi/" target="_blank" rel="noopener">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r="0.6" fill="var(--red)"></circle></svg></div>
+        <div class="meta"><div class="plat">Instagram</div><div class="handle">mohamed.amine_trabelsi</div></div>
+      </a>
+
+      <a class="card" href="https://www.facebook.com/med.damino" target="_blank" rel="noopener">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H8v3h3v6h3v-6h3l1-3h-4V9c0-.3.3-.5.6-.5"></path></svg></div>
+        <div class="meta"><div class="plat">Facebook</div><div class="handle">Med Damino</div></div>
+      </a>
+
+      <div class="card" id="discordCard">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="7" width="16" height="11" rx="4"></rect><circle cx="9" cy="12.5" r="1.2" fill="var(--red)"></circle><circle cx="15" cy="12.5" r="1.2" fill="var(--red)"></circle><path d="M8 7l1-2h6l1 2"></path></svg></div>
+        <div class="meta"><div class="plat">Discord</div><div class="handle">amiiiine4444</div></div>
+        <div class="copy-hint">Copied</div>
+      </div>
+
+      <div class="card" id="riotCard">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 20L20 4M4 4l6 6M20 20l-6-6"></path></svg></div>
+        <div class="meta"><div class="plat">Valorant</div><div class="handle">amiiiine#4444</div></div>
+        <div class="copy-hint">Copied</div>
+      </div>
+
+      <a class="card" href="https://open.spotify.com/user/31ws3jae7wpjnysvl6l7iumoycmu" target="_blank" rel="noopener">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M7.5 10.2c3-.8 6-.5 8.6 1"></path><path d="M8 13c2.4-.6 4.8-.4 6.8.8"></path><path d="M8.5 15.6c1.8-.4 3.6-.3 5 .5"></path></svg></div>
+        <div class="meta"><div class="plat">Spotify</div><div class="handle">View profile</div></div>
+      </a>
+    </div>
+
+    <div class="music">
+      <div class="music-label">On repeat &middot; family</div>
+      <iframe src="https://open.spotify.com/embed/track/2JzZzZUQj3Qff7wapcbKjc?utm_source=generator&theme=0" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
   </div>
+
   <div class="grain"></div>
+
 <script>
   const startBtn = document.getElementById('startBtn');
   const splash = document.getElementById('splash');
   const flash = document.getElementById('flash');
   const main = document.getElementById('main');
   const mainVideo = document.getElementById('mainVideo');
+
   startBtn.addEventListener('click', () => {
     flash.classList.add('fire');
     mainVideo.currentTime = 0;
     mainVideo.play().catch(()=>{});
-    setTimeout(() => { splash.classList.add('hidden'); main.classList.add('show'); }, 180);
+    setTimeout(() => {
+      splash.classList.add('hidden');
+      main.classList.add('show');
+    }, 180);
     setTimeout(() => flash.classList.remove('fire'), 600);
   });
+
   const overlay = document.getElementById('overlay');
   const sheet = document.getElementById('sheet');
   const openSheet = document.getElementById('openSheet');
   const closeSheet = document.getElementById('closeSheet');
+
   function showSheet(){ overlay.classList.add('show'); sheet.classList.add('show'); }
   function hideSheet(){ overlay.classList.remove('show'); sheet.classList.remove('show'); }
+
   openSheet.addEventListener('click', showSheet);
   closeSheet.addEventListener('click', hideSheet);
   overlay.addEventListener('click', hideSheet);
+
   function bindCopy(id, text){
     const el = document.getElementById(id);
     el.addEventListener('click', () => {
